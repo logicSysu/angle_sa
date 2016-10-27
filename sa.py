@@ -38,10 +38,12 @@ def sentimenter(stn):
 	return labels
 
 
-def writeLabels(file_address, labels):
+def writeLabels(file_address, labels, stn_num):
 	csv_file = file(file_address, 'wb')
 	writer = csv.writer(csv_file)
-	writer.write(labels)	# need to refine
+	#writer.writerow(['SentenceId', 'View', 'Opinion'])
+	line = [str(stn_num)] + labels.values()
+	writer.writerow(line)
 	csv_file.close()
 
 
@@ -51,7 +53,7 @@ def main():
 		stn_num = stn_pair[0]
 		stn = stn_pair[1]
 		labels = sentimenter(stn)
-		writeLabels(labels)
+		writeLabels('data/Answer.csv',labels, stn_num)
 	print "Yes!"
 
 
