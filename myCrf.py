@@ -1,5 +1,3 @@
-
-
 import pycrfsuite
 
 # do the sentiment analysis job
@@ -35,7 +33,7 @@ def crf(tokens, address):
 	y_train = [sent2labels(stn) for stn in readCsv(Train.csv)]
 
 	X_test = [sent2features(stn) for stn in readCsv(Test.csv)] 
-	y_text = [sent2labels(stn) for stn in readCsv(Test.csv)]
+	y_test = [sent2labels(stn) for stn in readCsv(Test.csv)]
 	
 	
 
