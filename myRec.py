@@ -5,4 +5,11 @@
 # output: address (dict) 
 #			key: entity_name (str)
 #			value: index of the entity (list)
+
+
+#before StanfordNERTagger in nltk.tag should be imported
 def recognizer(tokens):
+	#ner_test_chinese.ser.gz is a model train on ner_test.tsv
+	chinese_ner = StanfordNERTagger('ner_test_chinese.ser.gz')
+	for word, tag in  chinese_ner.tag(token_sent.split()):
+    		print word.encode('utf-8'), tag
