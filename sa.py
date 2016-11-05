@@ -3,7 +3,8 @@
 import csv
 import myCrf
 import thuSeg
-import myRec
+#import myRec
+import naiveNer
 
 
 # input: file_address (test.csv)
@@ -33,8 +34,9 @@ def preprocessing(raw_stn):
 def sentimenter(stn):
 	stn = preprocessing(stn)
 	tokens = thuSeg.segmenter(stn)
-	tokens_dict = myRec.recognizer(tokens)
-	labels = myCrf.crf(tokens, tokens_dict)
+	#tokens_dict = myRec.recognizer(tokens)
+	#tokens_dict = naiveNer.naiveNer(tokens)
+	labels = myCrf.crf(tokens)
 	return labels
 
 

@@ -1,7 +1,7 @@
 
 import thulac
 
-seger = thulac.thulac("-seg_only")
+seger = thulac.thulac('')
 
 # chinese segmenter
 # input: stn (str)
