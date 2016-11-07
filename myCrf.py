@@ -136,10 +136,14 @@ def sent2tokens(sent):
 
 
 
-def trainModel():
+def trainModel(withDefaultTokens=True):
 
-	raw_train_sents = readCsv('data/Train.csv')
-	train_sents = [prettyStn(seg.segmenter(stn), stn_id) for stn_id, stn in raw_train_sents]
+	if withDefaultTokens:
+		pf = open('data/tokens.txt','r')
+		train_sents = eval(pf.read())
+	else:
+		raw_train_sents = readCsv('data/Train.csv')
+		train_sents = [prettyStn(seg.segmenter(stn), stn_id) for stn_id, stn in raw_train_sents]
 
 	X_train = [sent2features(s) for s in train_sents]
 	y_train = [sent2labels(s) for s in train_sents]
