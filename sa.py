@@ -40,22 +40,27 @@ def sentimenter(stn):
 	return labels
 
 
-def writeLabels(file_address, labels, stn_num):
+def writeLabels(file_address, result):
 	csv_file = file(file_address, 'wb')
 	writer = csv.writer(csv_file)
-	#writer.writerow(['SentenceId', 'View', 'Opinion'])
-	line = [str(stn_num)] + labels.values()
-	writer.writerow(line)
+	writer.writerow(['SentenceId', 'View', 'Opinion'])
+	writer.writerows(result)
 	csv_file.close()
 
 
 def main():
 	stns = readCsv('data/Test.csv')
+	result = []
+	count = 0
 	for stn_pair in stns:
 		stn_num = stn_pair[0]
 		stn = stn_pair[1]
 		labels = sentimenter(stn)
-		writeLabels('data/Answer.csv',labels, stn_num)
+		labels_stn_num = [tuple([str(stn_num), entity, labels[entity]]) for entity in labels]
+		result += labels_stn_num
+		count += 1
+		print 'sentence '+str(count)+ ' finished. ' + str(count) + ' out of ' + str(len(stns))
+	writeLabels('data/Answer.csv',result)
 	print "Yes!"
 
 

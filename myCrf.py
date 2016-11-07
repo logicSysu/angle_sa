@@ -62,7 +62,7 @@ def prettyStn(tokens, stn_id='0', is_train=True):
 		labels = fetchLabelPair(stn_id)
 		for i in range(len(init_triples)):
 			triple = init_triples[i]
-			print 1111,triple[0]
+			#print 1111,triple
 			for label in labels:
 				if label.startswith(triple[0]):
 					triple[0] = label
@@ -73,8 +73,9 @@ def prettyStn(tokens, stn_id='0', is_train=True):
 							init_triples[i-1][2] = 'b-pos'	# label as 'before pos'
 						elif labels[label] == 'neu':
 							init_triples[i-1][2] = 'b-neu'	# label as 'before neu'
-	print init_triples
-	return init_triples
+	triples = [tuple(triple) for triple in init_triples if len(triple) == 3]
+	#print triples
+	return triples
 
 #####  copy from example in http://nbviewer.jupyter.org/github/tpeng/python-crfsuite/blob/master/examples/CoNLL%202002.ipynb
 def word2features(sent, i):
@@ -124,6 +125,7 @@ def sent2features(sent):
     return [word2features(sent, i) for i in range(len(sent))]
 
 def sent2labels(sent):
+    #print 2222,sent
     return [label for token, postag, label in sent]
 
 def sent2tokens(sent):
@@ -137,11 +139,11 @@ def sent2tokens(sent):
 def trainModel():
 
 	raw_train_sents = readCsv('data/Train.csv')
-	train_sents = [prettyStn(seg.segmenter(stn), stn_id) for stn, stn_id in raw_train_sents]
+	train_sents = [prettyStn(seg.segmenter(stn), stn_id) for stn_id, stn in raw_train_sents]
 
 	X_train = [sent2features(s) for s in train_sents]
 	y_train = [sent2labels(s) for s in train_sents]
-	print y_train
+	#print y_train
 
 	#train the model
 	trainer = pycrfsuite.Trainer(verbose=False)
@@ -183,11 +185,11 @@ def crf(tokens):
 
 	raw_tokens = prettyStn(tokens,'0',False)	# need to o
 	labels = tagger.tag(sent2features(raw_tokens))
-	print labels
+	#print labels
 	result = {}
 	for i in range(len(labels)):
-		if labels[i] != 'o':
-			result[raw_tokens[i]] = labels[i]
+		if labels[i] == 'neu' or labels[i] == 'pos':
+			result[raw_tokens[i][0]] = labels[i]
 	return result
 
 
