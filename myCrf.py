@@ -120,9 +120,31 @@ def word2features(sent, i):
                 
     return features
 
+def numFeatures(sent):
+	d = dict()
+	d[neg] = 0
+	d[sentiment] = 0
+	d[verb] = 0
+	d[adv] = 0
+	d[question] = 0
+	d[exclamation] = 0
+	temp = []
+	dictlist = []
+	for word in sent:
+		if sent[word][1] = '''negatives''': d[neg] = d[neg] + 1
+		elif sent[word][1] = '''sentiment words''': d[sentiment] = d[sentiment] + 1
+		elif sent[word][1] = '''verb''': d[verb] = d[verb] + 1
+		elif sent[word][1] = '''adv''': d[adv] = d[adv] + 1
+		elif sent[word][1] = '''question words''': d[question] = d[question] + 1
+		else sent[word][1] = '''exclamation''': d[exclamation] = d[exclamation] + 1
+	for key, value in d.iteritems():
+		temp = [key + value]
+		dictlist.append(temp)
+	return dictlist
+
 
 def sent2features(sent):
-    return [word2features(sent, i) for i in range(len(sent))]
+    return [word2features(sent, i) for i in range(len(sent))] + numFeatures(sent)
 
 def sent2labels(sent):
     #print 2222,sent
