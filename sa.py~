@@ -33,8 +33,7 @@ def preprocessing(raw_stn):
 #			value: label (str) (pos or neg)
 def sentimenter(stn):
 	stn = preprocessing(stn)
-	tokens = jiebaSeg.
-	#tokens = thuSeg.segmenter(stn)
+	tokens = thuSeg.segmenter(stn)
 	#tokens_dict = myRec.recognizer(tokens)
 	#tokens_dict = naiveNer.naiveNer(tokens)
 	labels = myCrf.crf(tokens)
