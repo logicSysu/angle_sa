@@ -1,4 +1,4 @@
-
+# -*- coding: UTF-8 -*-
 
 import pycrfsuite
 import csv
@@ -71,6 +71,8 @@ def prettyStn(tokens, stn_id='0', is_train=True):
 					if i > 0:
 						if labels[label] == 'pos':
 							init_triples[i-1][2] = 'b-pos'	# label as 'before pos'
+						elif labels[label] == 'neg':
+							init_triples[i-1][2] = 'b-neg'	# label as 'before neg'
 						elif labels[label] == 'neu':
 							init_triples[i-1][2] = 'b-neu'	# label as 'before neu'
 	triples = [tuple(triple) for triple in init_triples if len(triple) == 3]
