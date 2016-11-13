@@ -33,8 +33,8 @@ def preprocessing(raw_stn):
 #			value: label (str) (pos or neg)
 def sentimenter(stn):
 	stn = preprocessing(stn)
-	tokens = jiebaSeg.
-	#tokens = thuSeg.segmenter(stn)
+	#tokens = jiebaSeg.
+	tokens = thuSeg.segmenter(stn)
 	#tokens_dict = myRec.recognizer(tokens)
 	#tokens_dict = naiveNer.naiveNer(tokens)
 	labels = myCrf.crf(tokens)
@@ -61,7 +61,7 @@ def main():
 		result += labels_stn_num
 		count += 1
 		print 'sentence '+str(count)+ ' finished. ' + str(count) + ' out of ' + str(len(stns))
-	writeLabels('data/Answer.csv',result)
+	writeLabels('data/AnswerWithSent.csv',result)
 	print "Yes!"
 
 

@@ -3,6 +3,9 @@
 import pycrfsuite
 import csv
 
+import JiebaSeg as jb
+import sentimenter as st
+
 import thuSeg as seg
 
 
@@ -85,22 +88,17 @@ def word2features(sent, i):
     postag = sent[i][1]
     features = [
         'bias',
-        'word.lower=' + word.lower(),
         'word[-3:]=' + word[-3:],
         'word[-2:]=' + word[-2:],
-        'word.isupper=%s' % word.isupper(),
-        'word.istitle=%s' % word.istitle(),
         'word.isdigit=%s' % word.isdigit(),
         'postag=' + postag,
         'postag[:2]=' + postag[:2],
     ]
+    features += st.howManyAroundIt(sent, i, 6)	# detect how many negations, sentiment words around i, in the range of [i-6,i+6]
     if i > 0:
         word1 = sent[i-1][0]
         postag1 = sent[i-1][1]
         features.extend([
-            '-1:word.lower=' + word1.lower(),
-            '-1:word.istitle=%s' % word1.istitle(),
-            '-1:word.isupper=%s' % word1.isupper(),
             '-1:postag=' + postag1,
             '-1:postag[:2]=' + postag1[:2],
         ])
@@ -119,34 +117,11 @@ def word2features(sent, i):
         ])
     else:
         features.append('EOS')
-                
     return features
-
-def numFeatures(sent):
-	d = dict()
-	d[neg] = 0
-	d[sentiment] = 0
-	d[verb] = 0
-	d[adv] = 0
-	d[question] = 0
-	d[exclamation] = 0
-	temp = []
-	dictlist = []
-	for word in sent:
-		if sent[word][1] = '''negatives''': d[neg] = d[neg] + 1
-		elif sent[word][1] = '''sentiment words''': d[sentiment] = d[sentiment] + 1
-		elif sent[word][1] = '''verb''': d[verb] = d[verb] + 1
-		elif sent[word][1] = '''adv''': d[adv] = d[adv] + 1
-		elif sent[word][1] = '''question words''': d[question] = d[question] + 1
-		else sent[word][1] = '''exclamation''': d[exclamation] = d[exclamation] + 1
-	for key, value in d.iteritems():
-		temp = [key + value]
-		dictlist.append(temp)
-	return dictlist
 
 
 def sent2features(sent):
-    return [word2features(sent, i) for i in range(len(sent))] + numFeatures(sent)
+    return [word2features(sent, i) for i in range(len(sent))] #+ st.numFeatures(sent)
 
 def sent2labels(sent):
     #print 2222,sent
@@ -168,6 +143,7 @@ def trainModel(withDefaultTokens=True):
 	else:
 		raw_train_sents = readCsv('data/Train.csv')
 		train_sents = [prettyStn(seg.segmenter(stn), stn_id) for stn_id, stn in raw_train_sents]
+		#train_sents = [prettyStn(jb.jbSeg(stn), stn_id) for stn_id, stn in raw_train_sents]
 
 	X_train = [sent2features(s) for s in train_sents]
 	y_train = [sent2labels(s) for s in train_sents]
@@ -188,7 +164,7 @@ def trainModel(withDefaultTokens=True):
 		'feature.possible_transitions': True
 	})
 
-	trainer.train('data/cfrModel.crfsuite')
+	trainer.train('data/cfrModel_withSent.crfsuite')
 
 #	!ls -lh ./Train.csv
 
@@ -205,12 +181,7 @@ def crf(tokens):
 
 	#make predictions
 	tagger = pycrfsuite.Tagger()
-	tagger.open('data/cfrModel.crfsuite')
-
-# output: result (dict)
-#			key: entity_name (str)
-#			value: label (str) (pos or neg)	
-
+	tagger.open('data/cfrModel_withSent.crfsuite')
 	raw_tokens = prettyStn(tokens,'0',False)	# need to o
 	labels = tagger.tag(sent2features(raw_tokens))
 	#print labels
