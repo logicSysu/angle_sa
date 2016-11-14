@@ -187,7 +187,7 @@ def crf(tokens):
 	#print labels
 	result = {}
 	for i in range(len(labels)):
-		if labels[i] == 'neu' or labels[i] == 'pos':
+		if labels[i] == 'neu' or labels[i] == 'pos' or labels[i] == 'neg':
 			result[raw_tokens[i][0]] = labels[i]
 	return result
 

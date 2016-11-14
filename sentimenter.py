@@ -9,26 +9,28 @@ def file2dict(file_address):
 	dictionary = list(pf)
 	return dictionary
 
-negReviewWords = file2dict('情感词典/negReviewWord.txt')
-negSentimentWords = file2dict('情感词典/negSentimentWord.txt') + file2dict('NTUSD/NTUSD_simplified/NTUSD_negative_simplified.txt')
-posReviewWords = file2dict('情感词典/posReviewWord.txt')
-posSentimentWords = file2dict('情感词典/posSentimentWord.txt') + file2dict('NTUSD/NTUSD_simplified/NTUSD_positive_simplified.txt')
-negations = file2dict('情感词典/negation.txt')
+negReviewWords = file2dict('sentimentDictionary/negReviewWord.txt')
+negSentimentWords = file2dict('sentimentDictionary/negSentimentWord.txt') + file2dict('NTUSD/NTUSD_simplified/NTUSD_negative_simplified.txt')
+posReviewWords = file2dict('sentimentDictionary/posReviewWord.txt')
+posSentimentWords = file2dict('sentimentDictionary/posSentimentWord.txt') + file2dict('NTUSD/NTUSD_simplified/NTUSD_positive_simplified.txt')
+negations = file2dict('sentimentDictionary/negation.txt')
+connectives = file2dict('connectiveDictionary/prettyUnSingleWord.txt')
 
 
-def getTagFromDict(word):
-	tag = ''
-	if word in posSentimentWords:
-		tag += '1'
-	if word in posReviewWords:
-		tag += '2'
-	if word in negSentimentWords:
-		tag += '3'
-	if word in negReviewWords:
-		tag += '4'
-	if word in negations:
-		tag += '5'
-	return tag
+# def getTagFromDict(word):
+# 	tag = ''
+# 	if word in posSentimentWords:
+# 		tag += '1'
+# 	if word in posReviewWords:
+# 		tag += '2'
+# 	if word in negSentimentWords:
+# 		tag += '3'
+# 	if word in negReviewWords:
+# 		tag += '4'
+# 	if word in negations:
+# 		tag += '5'
+# 	return tag
+
 
 def howManyAroundIt(sent, i, range=6):
 	begin = max(0,i-range)
@@ -39,6 +41,7 @@ def howManyAroundIt(sent, i, range=6):
 	num_of_posReview = 0
 	num_of_negSentiment = 0
 	num_of_posSentiment = 0
+	num_of_connective = 0
 	for word in area:
 		if word in posSentimentWords:
 			num_of_posSentiment += 1
@@ -50,6 +53,8 @@ def howManyAroundIt(sent, i, range=6):
 			num_of_negReview += 1
 		if word in negations:
 			num_of_negation += 1
+		if word in connectives:
+			num_of_connective += 1
 	num_features = []
 	if num_of_posSentiment:
 		num_features.append('num.posSentiment='+str(num_of_posSentiment))
@@ -61,6 +66,8 @@ def howManyAroundIt(sent, i, range=6):
 		num_features.append('num.negReview='+str(num_of_negReview))
 	if num_of_negation:
 		num_features.append('num.negation='+str(num_of_negation))
+	if num_of_connective:
+		num_features.append('num.connective='+str(num_of_connective))
 	return num_features
 	
 

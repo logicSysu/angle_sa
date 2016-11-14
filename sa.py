@@ -61,7 +61,7 @@ def main():
 		result += labels_stn_num
 		count += 1
 		print 'sentence '+str(count)+ ' finished. ' + str(count) + ' out of ' + str(len(stns))
-	writeLabels('data/AnswerWithSent.csv',result)
+	writeLabels('data/AnswerWithSent1.csv',result)
 	print "Yes!"
 
 
