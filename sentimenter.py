@@ -83,7 +83,7 @@ def numFeatures(sent):
 	temp = []
 	dictlist = []
 	for word in sent:
-		if sent[word][1] == '''negatives''':
+		if sent[word][0] in negations:
 			d[neg] = d[neg] + 1
 		elif sent[word][1] == '''sentiment words''':
 			d[sentiment] = d[sentiment] + 1
